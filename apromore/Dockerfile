@@ -8,12 +8,25 @@ RUN apt-get -y update \
 && apt-get -y install git \
 && apt-get -y install python3 \
 && apt-get -y install python3-pip \
+# && apt-get -y install xserver-xorg-core \
 # && apt-get -y install sudo \
 # && apt-get -y install telnet \
 # && apt-get -y install iputils-ping \
 && apt-get -y clean
 
 WORKDIR /opt/
+
+# Add LPSolve sources
+ADD http://downloads.sourceforge.net/project/lpsolve/lpsolve/5.5.2.0/lp_solve_5.5.2.0_source.tar.gz /opt/
+RUN tar xzvf lp_solve_5.5.2.0_source.tar.gz && \
+	rm lp_solve_5.5.2.0_source.tar.gz
+# Compile LPSolve
+RUN chmod +x /opt/lp_solve_5.5/lpsolve55/ccc
+RUN cd /opt/lp_solve_5.5/lpsolve55 && \
+	./ccc
+# Set environmental variables for LPSolve
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$RDBASE/lib:/opt/lp_solve_5.5/lpsolve55/bin/ux64
+
 RUN git clone https://github.com/nirdizati/nirdizati-training-backend.git
 
 WORKDIR /opt/nirdizati-training-backend/
@@ -23,6 +36,7 @@ RUN chown -R apromore:apromore /opt/nirdizati-training-backend \
 && chmod -R 777 /opt/nirdizati-training-backend
 
 ENV PYTHONPATH=/opt/nirdizati-training-backend/
+# ENV DISPLAY=localhost:0
 
 RUN mkdir /opt/apromore
 COPY . /opt/apromore/
