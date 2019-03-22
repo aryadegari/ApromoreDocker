@@ -16,16 +16,17 @@ RUN apt-get -y update \
 
 WORKDIR /opt/
 
-# Add LPSolve sources
-ADD http://downloads.sourceforge.net/project/lpsolve/lpsolve/5.5.2.0/lp_solve_5.5.2.0_source.tar.gz /opt/
-RUN tar xzvf lp_solve_5.5.2.0_source.tar.gz && \
-	rm lp_solve_5.5.2.0_source.tar.gz
-# Compile LPSolve
-RUN chmod +x /opt/lp_solve_5.5/lpsolve55/ccc
-RUN cd /opt/lp_solve_5.5/lpsolve55 && \
-	./ccc
-# Set environmental variables for LPSolve
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$RDBASE/lib:/opt/lp_solve_5.5/lpsolve55/bin/ux64
+# # Add LPSolve sources
+# ADD http://downloads.sourceforge.net/project/lpsolve/lpsolve/5.5.2.0/lp_solve_5.5.2.0_source.tar.gz /opt/
+# RUN tar xzvf lp_solve_5.5.2.0_source.tar.gz && \
+# 	rm lp_solve_5.5.2.0_source.tar.gz
+# # Compile LPSolve
+# RUN chmod +x /opt/lp_solve_5.5/lpsolve55/ccc
+# RUN cd /opt/lp_solve_5.5/lpsolve55 && \
+# 	./ccc
+# # Set environmental variables for LPSolve
+# ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$RDBASE/lib:/opt/lp_solve_5.5/lpsolve55/bin/ux64
+
 
 RUN git clone https://github.com/nirdizati/nirdizati-training-backend.git
 
@@ -43,6 +44,13 @@ COPY . /opt/apromore/
 
 RUN chown -R apromore:apromore /opt/apromore \
 && chmod -R 777 /opt/apromore
+
+# setup LPSolve library
+# ENV LD_LIBRARY_PATH /opt/apromore/virgo-tomcat-server-3.6.4.RELEASE/liblpsolve55
+RUN cp /opt/apromore/virgo-tomcat-server-3.6.4.RELEASE/liblpsolve55/* /usr/local/lib \
+    && ldconfig \
+    && chmod 755 /usr/local/lib/liblpsolve55j.so
+ENV LD_LIBRARY_PATH /usr/local/lib
 
 WORKDIR /opt/apromore/
 USER apromore
