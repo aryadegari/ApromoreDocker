@@ -1,13 +1,20 @@
-FROM ubuntu:18.04
+# FROM ubuntu:18.04
+
+FROM openjdk:8
+
+# FROM ibmjava:8
 
 RUN groupadd -r apromore && useradd --no-log-init -r -g apromore apromore
 
 RUN apt-get -y update \
-&& apt-get -y install openjdk-8-jre-headless \
+# && apt-get -y install openjdk-8-jre-headless \
+# && apt-get -y install default-jdk \
+# && apt-get install -y openjdk-8-jre \
 && sed -i -e '/^assistive_technologies=/s/^/#/' /etc/java-8-openjdk/accessibility.properties \
 && apt-get -y install git \
 && apt-get -y install python3 \
 && apt-get -y install python3-pip \
+&& apt-get -y install xvfb \
 # && apt-get -y install xserver-xorg-core \
 # && apt-get -y install sudo \
 # && apt-get -y install telnet \
@@ -37,7 +44,7 @@ RUN chown -R apromore:apromore /opt/nirdizati-training-backend \
 && chmod -R 777 /opt/nirdizati-training-backend
 
 ENV PYTHONPATH=/opt/nirdizati-training-backend/
-# ENV DISPLAY=localhost:0
+# ENV DISPLAY=localhost:0.0
 
 RUN mkdir /opt/apromore
 COPY . /opt/apromore/
@@ -51,6 +58,9 @@ RUN cp /opt/apromore/virgo-tomcat-server-3.6.4.RELEASE/liblpsolve55/* /usr/local
     && ldconfig \
     && chmod 755 /usr/local/lib/liblpsolve55j.so
 ENV LD_LIBRARY_PATH /usr/local/lib
+
+# RUN Xvfb :1 & \
+#     && export DISPLAY=localhost:1.0
 
 WORKDIR /opt/apromore/
 USER apromore
