@@ -34,7 +34,7 @@ WORKDIR /opt/
 # # Set environmental variables for LPSolve
 # ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$RDBASE/lib:/opt/lp_solve_5.5/lpsolve55/bin/ux64
 
-
+# PREDICTIVE MONITORING SETUP
 RUN git clone https://github.com/nirdizati/nirdizati-training-backend.git
 
 WORKDIR /opt/nirdizati-training-backend/
@@ -46,14 +46,27 @@ RUN chown -R apromore:apromore /opt/nirdizati-training-backend \
 ENV PYTHONPATH=/opt/nirdizati-training-backend/
 # ENV DISPLAY=localhost:0.0
 
+# APROMORE SETUP
 RUN mkdir /opt/apromore
 COPY . /opt/apromore/
 
 RUN chown -R apromore:apromore /opt/apromore \
 && chmod -R 777 /opt/apromore
 
+# PROCESS DISCOVERY ADVANCED SETUP
+WORKDIR /opt/
+RUN git clone https://github.com/AdaptiveBProcess/SiMo-Discoverer.git \
+&& cp /opt/apromore/simo-files/requirements.txt /opt/SiMo-Discoverer \
+&& cp /opt/apromore/simo-files/apromore-simo.py /opt/SiMo-Discoverer/simo
+WORKDIR /opt/SiMo-Discoverer/
+RUN pip3 install -r requirements.txt
+
+RUN chown -R apromore:apromore /opt/SiMo-Discoverer \
+&& chmod -R 777 /opt/SiMo-Discoverer
+
+ENV PYTHONPATH=/opt/SiMo-Discoverer/
+
 # setup LPSolve library
-# ENV LD_LIBRARY_PATH /opt/apromore/virgo-tomcat-server-3.6.4.RELEASE/liblpsolve55
 RUN cp /opt/apromore/virgo-tomcat-server-3.6.4.RELEASE/liblpsolve55/* /usr/local/lib \
     && ldconfig \
     && chmod 755 /usr/local/lib/liblpsolve55j.so
