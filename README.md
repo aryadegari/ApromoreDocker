@@ -43,18 +43,26 @@ For Linux versions, please follow [this link](https://download.docker.com/linux/
 Start Docker Desktop after installation.
 
 ### Configure Docker Desktop
-Right-click the Docker icon in the task bar, select Settings > Advanced.  
-Set cpu: 4, memory: 4096MB memory, swap: 2048MB
+Right-click the Docker icon in the task bar, select Settings/Preferences > Advanced.  
+Set CPUs: 4, memory: 4096MB memory, swap: 2048MB
+
+CPUs: By default, Docker Desktop is set to use half the number of processors available on the host machine. In order increase processing power, set this to 4.
+
+Memory: By default, Docker Desktop is set to use 2 GB runtime memory, allocated from the total available memory on your Machine. In order increase RAM, set this to 4096MB.
+
+Swap: Set to 2048MB.
 
 ## Download Apromore Docker
 Download the lastest [Apromore Docker release](https://github.com/apromore/ApromoreDocker/releases/latest).  
 Unzip the downloaded file and open the ApromoreDocker-*version* folder.  
 
 ## Start Apromore Docker
-Run this to start the Apromore Docker containers, it may take up to 10 minutes the first time your run this.  
+Run following script to start the Apromore Docker containers, it may take up to 10 minutes the first time your run this.  
 
 Windows - run `start.bat`  
 Mac / Linux - run `start`  
+
+When `Started plan 'org.apromore.root' version '1.1.0'` is output in the console, which indicate Apromore Docker server is up.
 
 Open Apromore Web UI: [http://localhost:9000](http://localhost:9000).  
 Use username: `testuser` and password: `testuser` to login.
@@ -62,15 +70,13 @@ Use username: `testuser` and password: `testuser` to login.
 ## Stop Apromore Docker
 Run following script to stop the Apromore Docker containers.  Your saved works on Apromore Docker will still be there next time you start it.  
 
-***Note: Stop Apromore Docker and start again will overwrite application data with initial sample data.***  
-
-Please backup your work before stop Apromore Docker. See [instruction](# Caveats) below on how to backup and restore user data.
-
 Windows - run `stop.bat`  
-Mac / Linux - run `stop`   
+Mac / Linux - run `stop` 
 
 ## Uninstall Apromore Docker
 Run following script to remove the Apromore Docker container images from your system.  Afterwards you can delete the ApromoreDocker-*version* folder.
+
+***Please backup your work before uninstall Apromore Docker. See [instruction](# Caveats) below on how to backup and restore user data.***
 
 Windows - run `remove.bat`  
 Mac / Linux - run `remove`  
@@ -82,23 +88,15 @@ Mac / Linux - run `remove`
 Apromore Docker create a data directory on the host system (outside the docker container) and mount this to a directory visible from inside the container. This places the database files and event log files in a known location on the host system, and makes it easy for tools and applications on the host system to access the files.  
 
 MySQL database: `/wherever/you/keep/ApromoreDocker/apromore/mysql-data`  
-Event Log files: `/wherever/you/keep/ApromoreCode/apromore/Event-logs_repository`
+Event Log files: `/wherever/you/keep/ApromoreDocker/apromore/Event-logs_repository`
 
-The downside is that the user needs to make sure that the directory exists, and that e.g. directory permissions and other security mechanisms on the host system are set up correctly. And stop Apromore Docker and start again will overwrite application data with initial sample data.
+The downside is that the user needs to make sure that the directory exists, and that e.g. directory permissions and other security mechanisms on the host system are set up correctly.
 
 ## How to backup and restore data
 
-We suggest user to backup MySQL database data folder (`/wherever/you/keep/ApromoreDocker/apromore/mysql-data`) before restart Apromore Docker.
+We suggest user to backup MySQL database data folder (`/wherever/you/keep/ApromoreDocker/apromore/mysql-data`) and event log files folder (`/wherever/you/keep/ApromoreDocker/apromore/Event-logs_repository`) before uninstall Apromore Docker.
 
-### Option 1
-
-Remove or comment out following line  
-`- "./mysql_init:/docker-entrypoint-initdb.d"`   
-from `/wherever/you/keep/ApromoreCode/docker-compose.yml` file before restart Apromore Docker.
-
-### Option 2
-Overwite MySQL database data folder (`/wherever/you/keep/ApromoreDocker/apromore/mysql-data`) with backup after Apromore Docker restarted.
-
+Overwrite MySQL database data folder (`/wherever/you/keep/ApromoreDocker/apromore/mysql-data`) with backup after Apromore Docker installation if you want to restore data.
 
 # Issues
 
@@ -109,4 +107,3 @@ If you encountered a problem running this container, you can file an [issue](htt
 * Output of docker info
 * Version of Apromore Docker
 * The step and command you used to run Apromore Docker, and any relevant output you saw (masking any sensitive information)
-
