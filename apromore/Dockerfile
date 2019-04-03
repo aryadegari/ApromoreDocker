@@ -54,17 +54,17 @@ RUN chown -R apromore:apromore /opt/apromore \
 && chmod -R 777 /opt/apromore
 
 # PROCESS DISCOVERY ADVANCED SETUP
-WORKDIR /opt/
-RUN git clone https://github.com/AdaptiveBProcess/SiMo-Discoverer.git \
-&& cp /opt/apromore/simo-files/requirements.txt /opt/SiMo-Discoverer \
-&& cp /opt/apromore/simo-files/apromore-simo.py /opt/SiMo-Discoverer/simo
-WORKDIR /opt/SiMo-Discoverer/
-RUN pip3 install -r requirements.txt
+# WORKDIR /opt/
+# RUN git clone https://github.com/AdaptiveBProcess/SiMo-Discoverer.git \
+# && cp /opt/apromore/simo-files/requirements.txt /opt/SiMo-Discoverer \
+# && cp /opt/apromore/simo-files/apromore-simo.py /opt/SiMo-Discoverer/simo
+# WORKDIR /opt/SiMo-Discoverer/
+# RUN pip3 install -r requirements.txt
 
-RUN chown -R apromore:apromore /opt/SiMo-Discoverer \
-&& chmod -R 777 /opt/SiMo-Discoverer
+# RUN chown -R apromore:apromore /opt/SiMo-Discoverer \
+# && chmod -R 777 /opt/SiMo-Discoverer
 
-ENV PYTHONPATH=/opt/SiMo-Discoverer/
+# ENV PYTHONPATH=/opt/SiMo-Discoverer/
 
 # setup LPSolve library
 RUN cp /opt/apromore/virgo-tomcat-server-3.6.4.RELEASE/liblpsolve55/* /usr/local/lib \
