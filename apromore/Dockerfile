@@ -34,6 +34,13 @@ WORKDIR /opt/
 # # Set environmental variables for LPSolve
 # ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$RDBASE/lib:/opt/lp_solve_5.5/lpsolve55/bin/ux64
 
+# APROMORE SETUP
+RUN mkdir /opt/apromore
+COPY . /opt/apromore/
+
+RUN chown -R apromore:apromore /opt/apromore \
+&& chmod -R 777 /opt/apromore
+
 # PREDICTIVE MONITORING SETUP
 RUN git clone https://github.com/nirdizati/nirdizati-training-backend.git
 
@@ -45,13 +52,6 @@ RUN chown -R apromore:apromore /opt/nirdizati-training-backend \
 
 ENV PYTHONPATH=/opt/nirdizati-training-backend/
 # ENV DISPLAY=localhost:0.0
-
-# APROMORE SETUP
-RUN mkdir /opt/apromore
-COPY . /opt/apromore/
-
-RUN chown -R apromore:apromore /opt/apromore \
-&& chmod -R 777 /opt/apromore
 
 # PROCESS DISCOVERY ADVANCED SETUP
 # WORKDIR /opt/
